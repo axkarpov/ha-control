@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Задачі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&display=swap">
+<style>
+
+:root { --bg: #F4F4F1; --card: #FFFFFF; --ink: #0F0F10; --muted: #6B6B70; --soft: #8C8C91; --line: #E6E5E0; --chip: #E9E8E3; --ring: #C9C8C2;
+  --acc: #2D5BFF; --acc-soft: #E8EEFF; --red: #C62828; --red-soft: #FDECEC; --amb: #9A6A00; --amb-soft: #FFF4D6; --grn: #1F9D55; --grn-soft: #E6F5EC;
+  --on-red: #FFFFFF; --now-btn: rgba(255,255,255,.14); --sh: 0 1px 2px rgba(15,15,16,.05), 0 10px 28px rgba(15,15,16,.07);
+  --f: "Inter Tight", "Helvetica Neue", Arial, system-ui, sans-serif; }
+:root.dark { --bg: #0C0C0E; --card: #18181B; --ink: #F2F1EE; --muted: #A1A1A8; --soft: #7C7C83; --line: #2A2A2F; --chip: #26262B; --ring: #4A4A50;
+  --acc: #5B7FFF; --acc-soft: #1C2340; --red: #FF6B6B; --red-soft: #3A1A1A; --amb: #F2C14E; --amb-soft: #2B2416; --grn: #4CC47E; --grn-soft: #15291D;
+  --on-red: #0C0C0E; --now-btn: rgba(0,0,0,.09); --sh: 0 10px 30px rgba(0,0,0,.35); color-scheme: dark; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.4 var(--f); }
+body { min-height: 100vh; }
+button, input { font: inherit; color: inherit; }
+button { border: 0; background: none; padding: 0; cursor: pointer; text-align: left; }
+button:focus-visible, input:focus-visible, a:focus-visible, [role="button"]:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+a { color: var(--acc); }
+[hidden] { display: none !important; }
+.red { color: var(--red); } .amb { color: var(--amb); } .grn { color: var(--grn); }
+main { max-width: 560px; margin: 0 auto; padding: 18px 16px 108px; }
+.load { color: var(--muted); padding: 80px 0; text-align: center; }
+.noacc { padding: 96px 8px 0; text-align: center; display: grid; gap: 12px; justify-items: center; }
+.noacc .ic { font-size: 40px; }
+.noacc h2 { margin: 0; font-size: 24px; letter-spacing: -.02em; }
+.noacc p { margin: 0 0 12px; color: var(--muted); max-width: 300px; line-height: 1.45; }
+.noacc .b { width: 100%; max-width: 320px; }
+
+
+nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: var(--card); border-top: 1px solid var(--line); padding: 6px 8px calc(8px + env(safe-area-inset-bottom, 0px)); }
+nav .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+nav button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; color: var(--soft); font-size: 11.5px; font-weight: 600; position: relative; text-align: center; }
+nav button.on { color: var(--ink); }
+.badge { position: absolute; top: 1px; left: 54%; min-width: 18px; height: 18px; border-radius: 9px; background: var(--acc); color: #fff; font-size: 11.5px; font-weight: 700; display: grid; place-items: center; padding: 0 5px; }
+.badge.r { background: var(--red); color: var(--on-red); }
+.toast { position: fixed; left: 50%; top: 12px; transform: translate(-50%, -160px); background: var(--ink); color: var(--bg); padding: 0 6px 0 16px; min-height: 44px; display: flex; align-items: center; gap: 4px;
+  border-radius: 14px; font-size: 15px; font-weight: 500; visibility: hidden; transition: transform .25s, visibility 0s .25s; z-index: 25; white-space: nowrap; max-width: calc(100% - 32px); }
+.toast.on { transform: translate(-50%, 0); visibility: visible; transition: transform .25s; }
+.toast span { padding-right: 10px; overflow: hidden; text-overflow: ellipsis; }
+.toast button { min-height: 44px; padding: 0 12px; font-weight: 700; color: #8FA8FF; }
+:root.dark .toast button { color: var(--acc); }
+.pv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; background: var(--amb-soft); color: var(--amb); border-radius: 16px; padding: 8px 8px 8px 14px; margin-bottom: 14px; font-size: 13px; font-weight: 500; }
+.pv button { min-height: 44px; padding: 0 16px; border-radius: 99px; background: var(--ink); color: var(--bg); font-size: 13px; font-weight: 600; }
+
+
+.hd { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-bottom: 14px; }
+.lbl { font-size: 13px; font-weight: 500; color: var(--muted); }
+h1 { margin: 4px 0 0; font-size: 34px; font-weight: 400; letter-spacing: -.035em; line-height: 1; }
+.ib { width: 44px; height: 44px; border-radius: 14px; background: var(--card); display: grid; place-items: center; flex: none; }
+.st { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.st.c4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.st button { background: var(--card); border-radius: 16px; min-height: 64px; padding: 10px 12px; display: grid; align-content: center; gap: 2px; min-width: 0; }
+.st.c4 button { padding: 10px; }
+.st b { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.st span { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st button.on { background: var(--ink); color: var(--bg); }
+.st button.on b, .st button.on span { color: inherit; } .st button.on span { opacity: .7; }
+.sec { display: flex; justify-content: space-between; align-items: center; margin: 20px 2px 8px; min-height: 24px; }
+.sec b { font-size: 13px; font-weight: 600; color: var(--muted); }
+.list { display: grid; gap: 8px; }
+.more { display: grid; place-items: center; width: 100%; min-height: 48px; border-radius: 16px; background: var(--chip); color: var(--ink); font-size: 15px; font-weight: 600; text-align: center; margin-top: 8px; text-decoration: none; }
+
+.mp { width: 100%; background: var(--card); border-radius: 22px; padding: 16px; display: grid; gap: 10px; text-align: left; min-width: 0; }
+.mp .top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.mp .top b { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+.mchip { font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 99px; background: var(--chip); color: var(--muted); white-space: nowrap; }
+.mchip.red { background: var(--red-soft); color: var(--red); } .mchip.amb { background: var(--amb-soft); color: var(--amb); } .mchip.grn { background: var(--grn-soft); color: var(--grn); }
+.mp .kp { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 8px; }
+.mp .kp b { font-size: 22px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.mp .kp span { font-size: 13px; color: var(--muted); text-align: right; }
+.mbar { position: relative; height: 8px; border-radius: 99px; margin-top: 4px; background: linear-gradient(90deg, var(--red-soft) 0 33.3%, var(--amb-soft) 33.3% 66.7%, var(--grn-soft) 66.7% 100%); }
+.mbar i { position: absolute; top: -4px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 3px solid var(--card); transform: translateX(-50%); }
+.mbl { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--soft); }
+.mp .ft { font-size: 13px; color: var(--muted); }
+.wk1 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; } .wk1 b { font-size: 34px; font-weight: 600; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; } .wk1 span { font-size: 13px; font-weight: 600; }
+.wbars { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: end; }
+.wbars div { display: grid; gap: 4px; justify-items: center; align-self: end; min-width: 0; }
+.wbars s { display: block; width: 100%; border-radius: 8px; background: var(--chip); text-decoration: none; }
+.wbars s.on { background: var(--acc); }
+.wbars em { font-style: normal; font-size: 13px; font-weight: 600; } .wbars span { font-size: 11.5px; color: var(--soft); white-space: nowrap; }
+.src0 { font-size: 13px; color: var(--soft); text-align: center; margin-top: 18px; }
+.s13 { font-size: 13px; color: var(--muted); }
+.empty { background: var(--card); border-radius: 24px; padding: 44px 24px; text-align: center; margin-top: 14px; }
+.empty b { display: block; font-size: 22px; font-weight: 600; letter-spacing: -.02em; } .empty p { margin: 6px 0 0; color: var(--muted); }
+
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.b { display: grid; place-items: center; min-height: 52px; border-radius: 16px; font-size: 15px; font-weight: 600; text-align: center; background: var(--card); border: 1px solid var(--line); color: var(--ink); padding: 0 10px; text-decoration: none; }
+.b.pri { background: var(--acc); border-color: var(--acc); color: #fff; }
+.b.mut { color: var(--muted); }
+.b.w2 { grid-column: 1 / -1; }
+.g4 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+
+
+.row { display: grid; grid-template-columns: 52px minmax(0, 1fr); background: var(--card); border-radius: 18px; min-height: 64px; width: 100%; }
+.row.av3 { grid-template-columns: 52px minmax(0, 1fr) 44px; }
+.ck { display: grid; place-items: center; min-height: 64px; }
+.ck i { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--ring); display: grid; place-items: center; }
+.ck svg { opacity: 0; }
+.ck.ro i { opacity: .4; }
+.row.done .ck i { background: var(--acc); border-color: var(--acc); } .row.done .ck svg { opacity: 1; }
+.rt { padding: 11px 14px 11px 0; display: grid; align-content: center; gap: 3px; min-width: 0; }
+.rt .n { font-size: 15px; font-weight: 500; line-height: 1.3; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.row.big .rt .n { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+.rt .m, .rt .d { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rt .d { color: var(--amb); }
+.rt .m .new { color: var(--acc); font-weight: 600; }
+.row.done .n { text-decoration: line-through; color: var(--soft); }
+.row .av { align-self: center; }
+.av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; flex: none; }
+.av.lg { width: 40px; height: 40px; font-size: 15px; }
+.star { color: var(--acc); }
+
+
+.now { position: relative; background: var(--ink); color: var(--bg); border-radius: 24px; padding: 18px; display: grid; gap: 16px; margin-top: 14px; touch-action: pan-y; user-select: none; -webkit-user-select: none; will-change: transform; }
+.now .nt { display: block; width: 100%; min-height: 44px; }
+.cap { font-size: 11.5px; font-weight: 700; letter-spacing: .07em; opacity: .65; }
+.now .t { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; margin-top: 6px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.now .m { font-size: 13px; opacity: .72; margin-top: 8px; }
+.now .b { background: var(--now-btn); border-color: transparent; color: var(--bg); }
+.now .b.pri { background: var(--acc); color: #fff; }
+.stamp { position: absolute; top: 16px; right: 16px; font-size: 13px; font-weight: 700; color: #fff; padding: 5px 10px; border-radius: 8px; opacity: 0; transition: opacity .1s; pointer-events: none; }
+.stack { position: relative; }
+.ghost { position: absolute; left: 12px; right: 12px; top: 14px; bottom: 0; background: var(--card); border-radius: 24px; opacity: .55; }
+.sw { position: relative; background: var(--card); border-radius: 24px; padding: 20px; display: grid; gap: 16px; box-shadow: var(--sh); touch-action: pan-y; user-select: none; -webkit-user-select: none; will-change: transform; margin-bottom: 14px; }
+.src { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.src > div:last-child { min-width: 0; }
+.sq { width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: var(--bg); display: grid; place-items: center; font-size: 13px; font-weight: 600; flex: none; }
+.src b { display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.src span { display: block; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.quote { background: var(--bg); border-radius: 14px; padding: 12px 14px; font-size: 15px; color: var(--muted); }
+.k { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+.task { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
+.ppl { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ppl.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pp { display: flex; align-items: center; gap: 8px; padding: 0 12px 0 6px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); min-height: 44px; font-size: 15px; font-weight: 500; min-width: 0; }
+.pp.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.pp span.nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.why { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.foot { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted); }
+.pill { font-size: 13px; font-weight: 600; background: var(--bg); color: var(--ink); padding: 5px 10px; border-radius: 8px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips button { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: 15px; font-weight: 500; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+.deck { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 14px -16px 0; padding: 2px 16px 8px; scroll-padding: 0 16px; scrollbar-width: none; }
+.deck::-webkit-scrollbar { display: none; }
+.pc { flex: 0 0 calc(100% - 30px); scroll-snap-align: start; background: var(--card); border-radius: 24px; padding: 16px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.pc.one { flex-basis: 100%; }
+.pc[role="button"] { cursor: pointer; }
+.pch { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.pn { flex: 1; min-width: 0; }
+.pn b { display: block; font-size: 17px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pn span { display: block; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chev { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; color: var(--muted); flex: none; }
+.vd { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: center; }
+.vd .w { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+.vd .m { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.rg { position: relative; flex: none; } .rg svg { display: block; }
+.rg b { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.axr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; row-gap: 1px; padding: 9px 0; border-top: 1px solid var(--line); align-items: center; }
+.axr .l { font-size: 13px; color: var(--muted); }
+.axr .v { font-size: 15px; font-weight: 500; line-height: 1.3; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.axr .pt { grid-column: 2; grid-row: 1 / span 2; }
+.pt { min-width: 42px; height: 28px; padding: 0 8px; border-radius: 9px; display: inline-grid; place-items: center; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--bg); color: var(--muted); white-space: nowrap; flex: none; }
+.pt.red { background: var(--red-soft); color: var(--red); } .pt.amb { background: var(--amb-soft); color: var(--amb); } .pt.grn { background: var(--grn-soft); color: var(--grn); }
+.tip { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; font-size: 15px; line-height: 1.35; border-top: 1px solid var(--line); padding-top: 12px; min-height: 53px; }
+.tip svg { margin-top: 1px; }
+.tip span { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.dots { display: flex; justify-content: center; gap: 6px; margin-top: 6px; }
+.dots i { width: 7px; height: 7px; border-radius: 99px; background: var(--chip); transition: width .2s; } .dots i.on { width: 20px; background: var(--ink); }
+.pr { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; background: var(--card); border-radius: 18px; min-height: 64px; padding: 10px 14px 10px 10px; width: 100%; }
+.pr .n { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr .m { font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr .x { text-align: right; } .pr .x b { display: block; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; } .pr .x span { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.e4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.e4 button { display: grid; justify-items: center; gap: 4px; padding: 10px 2px; border-radius: 14px; background: var(--bg); font-size: 13px; font-weight: 600; text-align: center; }
+
+
+.back { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; background: var(--card); border-radius: 99px; padding: 0 18px 0 14px; min-height: 44px; margin-bottom: 12px; }
+.pg { display: grid; gap: 10px; }
+.card { background: var(--card); border-radius: 22px; padding: 16px; display: grid; gap: 14px; min-width: 0; }
+.card h2 { margin: 0; font-size: 22px; font-weight: 600; line-height: 1.2; letter-spacing: -.02em; overflow-wrap: anywhere; }
+.card p { margin: 0; }
+.nx { background: var(--acc-soft); border-radius: 22px; padding: 16px; display: grid; gap: 14px; }
+.nx .l { font-size: 13px; font-weight: 600; color: var(--acc); }
+.nx p { margin: 3px 0 0; font-size: 17px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
+.axh { display: flex; justify-content: space-between; align-items: center; gap: 10px; } .axh b { font-size: 17px; font-weight: 600; }
+.f3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.f3 div, .f2 div { background: var(--bg); border-radius: 12px; padding: 10px 12px; min-width: 0; }
+.f3 span, .f2 span { display: block; font-size: 13px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.f3 b { display: block; font-size: 17px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.f2 b { display: block; font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scale { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; background: var(--chip); border-radius: 14px; padding: 3px; }
+.scale span { min-height: 44px; border-radius: 11px; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: var(--muted); text-align: center; }
+.scale span.on { background: var(--card); color: var(--ink); }
+.scale span.on.red { color: var(--red); } .scale span.on.grn { color: var(--grn); }
+.nl { display: grid; }
+.nl div { padding: 10px 0; border-top: 1px solid var(--line); line-height: 1.4; overflow-wrap: anywhere; }
+.nl div:first-child { border-top: 0; padding-top: 0; } .nl div:last-child { padding-bottom: 0; }
+.fields { display: grid; gap: 14px; } .fields span { display: block; font-size: 13px; color: var(--muted); margin-bottom: 2px; } .fields p { margin: 0; overflow-wrap: anywhere; }
+.sbox input { min-height: 52px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); padding: 0 14px; font-size: 17px; min-width: 0; width: 100%; outline-offset: 2px; }
+.msg { background: var(--card); border-radius: 18px; padding: 12px 14px; }
+.msg .w { font-size: 13px; color: var(--muted); margin-bottom: 4px; } .msg .w b { color: var(--ink); font-weight: 600; }
+.msg p { margin: 0; white-space: pre-line; overflow-wrap: anywhere; }
+mark { background: #FFE14A; color: #0F0F10; border-radius: 3px; padding: 0 1px; }
+
+
+.gh { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.gh b { font-size: 34px; font-weight: 400; letter-spacing: -.035em; line-height: 1; font-variant-numeric: tabular-nums; }
+.gbar { height: 8px; border-radius: 99px; background: var(--chip); overflow: hidden; } .gbar i { display: block; height: 100%; border-radius: 99px; background: var(--ink); }
+.bc { background: var(--card); border-radius: 18px; display: grid; }
+.bc .bt { padding: 14px; display: grid; gap: 6px; width: 100%; min-height: 64px; }
+.bh { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.bh i { width: 8px; height: 8px; border-radius: 50%; flex: none; background: var(--acc); } .bh i.red { background: var(--red); }
+.bh b { font-size: 13px; font-weight: 600; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .bh span { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.bc p { margin: 0; line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.bc.open p { display: block; }
+.bc .two { padding: 0 14px 14px; }
+@media (prefers-reduced-motion: reduce) { .toast, .dots i { transition: none; } }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); background: var(--chip); border-radius: 14px; padding: 3px; }
+.seg button { min-height: 44px; border-radius: 11px; font-size: 15px; font-weight: 600; color: var(--muted); text-align: center; }
+.seg button.on { background: var(--card); color: var(--ink); }
+</style>
+</head>
+<body>
+<main id="app"><div class="load">Завантажую…</div></main>
+<nav id="nav" hidden><div class="in">
+  <button data-tab="today"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>сьогодні</button>
+  <button data-tab="inbox"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13l2.5-7.5A2 2 0 0 1 7.4 4h9.2a2 2 0 0 1 1.9 1.5L21 13v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 13h5l1.5 2.5h5L16 13h5"/></svg>вхідні<span class="badge" id="bInbox" hidden></span></button>
+  <button data-tab="proj"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="7" height="7" rx="2"/><rect x="13.5" y="4" width="7" height="7" rx="2"/><rect x="3.5" y="14" width="7" height="7" rx="2"/><rect x="13.5" y="14" width="7" height="7" rx="2"/></svg>проєкти<span class="badge r" id="bProj" hidden></span></button>
+  <button data-tab="team"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6"/><circle cx="17" cy="9" r="2.5"/><path d="M16.4 14.5c2.2.2 3.7 1.6 4.2 4"/></svg>команда<span class="badge r" id="bTeam" hidden></span></button>
+  <button data-tab="brief"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>бриф</button>
+  <button data-tab="week" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19v-7M10 19V6M15 19v-4M20 19V9"/></svg>мій тиждень</button>
+</div></nav>
+<div class="toast" id="toast" role="status"></div>
+<script>
+var AV = { 'Алекс': ['А', '#0F0F10', '#FFFFFF'], 'Руслан': ['Р', '#E6ECFF', '#2147C8'], 'Юля': ['Ю', '#FCE9DC', '#9A4512'], 'Віка': ['В', '#EEE7FB', '#5B37A8'], 'Claude': ['C', '#E9E2FF', '#4B2BB8'] };
+var DAT = { 'Алекс': 'собі', 'Руслан': 'Руслану', 'Юля': 'Юлі', 'Віка': 'Віці' };
+var GEN = { 'Руслан': 'Руслана', 'Юля': 'Юлі', 'Віка': 'Віки' };
+var TICK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var ICO_S = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
+var CHEV = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+var ARROW = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
+
+var S = { cs: {}, ct: 0, init: '', d: null, tab: 'today', stack: [], tf: 'all', pf: 'all', pi: 0, bf: 'all', bo: {}, person: 'Руслан', tm: 'tasks', tpf: 'all', ei: 0, of: 'all', exp: {}, q: '',
+  done: {}, tom: {}, pend: {}, skip: null, stats: null, statsAt: 0, at: 0, loading: 0, owners: {}, busy: false, dragAt: 0, as: '' };
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function av(name, lg) { var a = AV[name] || [String(name || '?').charAt(0), '#E9E8E3', '#0F0F10']; return '<span class="av' + (lg ? ' lg' : '') + '" style="background:' + a[1] + ';color:' + a[2] + '">' + esc(a[0]) + '</span>'; }
+function toast(t, undo) { var el = $('toast'); el.innerHTML = '<span>' + esc(t) + '</span>' + (undo ? '<button data-undo="' + esc(undo) + '">відмінити</button>' : ''); el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(function () { el.classList.remove('on'); }, undo ? 4000 : 1700); }
+var API = 'https://script.google.com/macros/s/AKfycbzlPEdNNSJ4QRpQC-bf4nb4my5QNZliDxllgWZaiHG2Llozj-AO2ySLdv55Lz0qis5U/exec?api=1';
+function run(fn, args, ok, fail) {
+  ok = ok || function () { }; fail = fail || function () { toast('Не вийшло, спробуй ще раз'); };
+  if (window.google && google.script && google.script.run) { var r = google.script.run.withSuccessHandler(ok).withFailureHandler(fail); return r[fn].apply(r, args); }
+  fetch(API, { method: 'POST', keepalive: JSON.stringify(args).length < 60000, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn: fn, args: args }) })
+    .then(function (x) { if (!x.ok) throw new Error('HTTP ' + x.status); return x.json(); })
+    .then(function (d) { ok(d); }, function (e) { fail(e); });
+}
+function store(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
+function inbox() { return S.d.inbox; }
+function isM() { return !!(S.d && S.d.role === 'member'); }
+function top_() { return S.stack[S.stack.length - 1]; }
+function find(id) { return S.d.mine.concat(S.d.team, S.d.wait || []).filter(function (t) { return t.id === id; })[0]; }
+function open_(xs) { return xs.filter(function (t) { return !S.done[t.id] && !S.tom[t.id]; }); }
+
+function doneLocal() { return Object.keys(S.done).filter(function (id) { return (!S.pend[id] || S.pend[id].k === 'x') && !(S.d.doneToday || []).some(function (x) { return x.id === id; }); }); }
+function doneN() { return (S.d.doneToday || []).length + doneLocal().length; }
+function hot(t) { return t.hot || /горить/.test(t.heat || ''); }
+function mins(n) { return n >= 60 ? Math.floor(n / 60) + ' год' + (n % 60 ? ' ' + n % 60 + ' хв' : '') : n + ' хв'; }
+function tone(s) { return s == null ? '' : s >= 75 ? 'grn' : s >= 35 ? 'amb' : 'red'; }
+function word(s) { return s == null ? 'Нема факту' : s >= 75 ? 'Все добре' : s >= 55 ? 'Тримати руку' : s >= 35 ? 'Увага' : 'Рятувати'; }
+function grp(s) { return s == null ? 'mid' : s < 35 ? 'bad' : s < 75 ? 'mid' : 'good'; } // без факту = «стежити»
+function mono(n) { var w = String(n).split(/[\s.]+/).filter(Boolean); return esc((w.length > 1 ? w[0].charAt(0) + w[1].charAt(0) : String(n).slice(0, 2)).toUpperCase()); }
+function listy(xs) { return xs.length < 2 ? xs.join('') : xs.slice(0, -1).join(', ') + (/^[ІЇЄЮЯіїєюяАОУЕИаоуеи]/.test(xs[xs.length - 1]) ? ' й ' : ' і ') + xs[xs.length - 1]; }
+function plural(n, one, few, many) { var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; }
+
+
+function hd(lbl, title) { return '<div class="hd"><div><div class="lbl">' + lbl + '</div><h1>' + title + '</h1></div>' + (isM() ? '' : '<button class="ib" data-search="1" aria-label="пошук">' + ICO_S + '</button>') + '</div>'; }
+function stats(items, cur, key) { return '<div class="st' + (items.length > 3 ? ' c4' : '') + '">' + items.map(function (x) { return '<button data-set="' + key + ':' + x[0] + '" class="' + (cur === x[0] ? 'on' : '') + '" aria-pressed="' + (cur === x[0]) + '"><b class="' + (x[3] || '') + '">' + x[1] + '</b><span>' + x[2] + '</span></button>'; }).join('') + '</div>'; }
+function sec(t) { return '<div class="sec"><b>' + t + '</b></div>'; }
+function empty(b, p) { return '<div class="empty"><b>' + b + '</b><p>' + p + '</p></div>'; }
+function lim(key, xs, n, fn) { var all = S.exp[key], shown = all ? xs : xs.slice(0, n); return '<div class="list">' + shown.map(fn).join('') + '</div>' + (xs.length > n && !all ? '<button class="more" data-exp="' + esc(key) + '">показати ще ' + (xs.length - n) + '</button>' : ''); }
+function meta(t, plain) {
+  var date = hot(t) && !plain ? '<span class="red">' + esc(t.heat) + '</span>' : t.fresh && !plain ? '<span class="new">нова · ' + esc(t.heat) + '</span>' : esc(t.heat);
+  return [t.project ? esc(t.project) : '', date, t.mins ? '~' + mins(t.mins) : ''].filter(Boolean).join(' · ');
+}
+function row(t, o) {
+  o = o || {};
+  return '<div class="row' + (o.big ? ' big' : '') + (o.av ? ' av3' : '') + '">' +
+    (t.ro ? '<span class="ck ro" aria-hidden="true"><i></i></span>' : '<button class="ck" data-done="' + esc(t.id) + '" aria-label="закрити задачу"><i>' + TICK + '</i></button>') +
+    '<button class="rt" data-open="' + esc(t.id) + '"><div class="n">' + (t.big && !o.big && !o.plain ? '<span class="star">★ </span>' : '') + esc(t.name || t.title) + '</div><div class="m">' + meta(t) + '</div>' +
+    (t.dup ? '<div class="d">схожа: ' + esc(String(t.dup).slice(0, 48)) + '</div>' : '') + '</button>' + (o.av ? av(t.who) : '') + '</div>';
+}
+
+function crow(x, m) { return '<button class="row done" data-cl="' + esc(x.id) + '"><span class="ck"><i>' + TICK + '</i></span><div class="rt"><div class="n">' + esc(x.title) + '</div><div class="m">' + esc(m) + '</div></div></button>'; }
+function ring(v, size, sw, col, inner) {
+  var r = (size - sw) / 2, c = 2 * Math.PI * r, f = Math.max(0, Math.min(100, v || 0)) / 100, h = size / 2;
+  return '<div class="rg" style="width:' + size + 'px;height:' + size + 'px"><svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true"><circle cx="' + h + '" cy="' + h + '" r="' + r + '" fill="none" stroke="var(--chip)" stroke-width="' + sw + '"/><circle cx="' + h + '" cy="' + h + '" r="' + r + '" fill="none" stroke="' + col + '" stroke-width="' + sw + '" stroke-linecap="round" stroke-dasharray="' + (c * f).toFixed(1) + ' ' + c.toFixed(1) + '" transform="rotate(-90 ' + h + ' ' + h + ')"/></svg>' + inner + '</div>';
+}
+function pt(v, cls) { return '<span class="pt ' + (cls == null ? tone(v) : cls) + '">' + (v == null ? '—' : v) + '</span>'; }
+function pv() { return S.d.preview ? '<div class="pv"><span>Так бачить ' + esc(S.d.me) + '. Дії справжні, пишуться в Notion</span><button data-asx="1">вийти</button></div>' : ''; }
+
+
+function doneList() {
+  var dt = S.d.doneToday || [], loc = doneLocal().map(find).filter(Boolean);
+  if (!dt.length && !loc.length) return empty('поки нуль', 'Закриті сьогодні задачі з\'являться тут');
+  return sec('закрито сьогодні · ' + (dt.length + loc.length)) + '<div class="list">' +
+    loc.map(function (t) { return '<div class="row done"><span class="ck"><i>' + TICK + '</i></span><div class="rt"><div class="n">' + esc(t.name || t.title) + '</div><div class="m">' + esc([t.project, 'щойно'].filter(Boolean).join(' · ')) + '</div></div></div>'; }).join('') +
+    dt.map(function (x) { return crow(x, [x.project, x.at, x.claude ? 'через Claude' : ''].filter(Boolean).join(' · ')); }).join('') + '</div>';
+}
+function tailLinks() {
+  var on = oldList('all').length, h = '';
+  if (on) h += '<button class="more" data-old="all" style="margin-top:20px">старі задачі · ' + on + '</button>';
+  if (!isM()) h += '<div class="two" style="margin-top:8px"><button class="b" data-as="Руслан">як бачить Руслан</button><button class="b" data-as="Віка">як бачить Віка</button></div>';
+  return h;
+}
+function vToday() {
+  var om = open_(S.d.mine), hots = om.filter(hot);
+  var h = pv() + hd(esc(S.d.day), 'сьогодні') + stats([['all', om.length, 'відкрито'], ['hot', hots.length, 'горить', 'red'], ['done', doneN(), 'закрито']], S.tf, 'tf');
+  if (S.tf === 'hot') return h + (hots.length ? sec('горить · ' + hots.length) + '<div class="list">' + hots.map(function (t) { return row(t, { big: t.big && !isM() }); }).join('') + '</div>' : empty('нічого не горить', 'Кайф)'));
+  if (S.tf === 'done') return h + doneList();
+  if (isM()) { var mn = om.filter(function (t) { return !/^new-/.test(t.id); })[0]; return h + (mn ? nowCard(mn) : '') + vMemberList(om.filter(function (t) { return t !== mn; })); }
+  if (!om.length) return h + empty('пусто', 'Кайф)') + tailLinks();
+  var real = om.filter(function (t) { return !/^new-/.test(t.id); }), big = real.filter(function (t) { return t.big; }), now = big[0] || real[0];
+  var rb = om.filter(function (t) { return t.big && t !== now; }), sm = om.filter(function (t) { return t.small && !t.big && t !== now; }), rest = om.filter(function (t) { return !t.big && !t.small && t !== now; });
+  if (now) h += nowCard(now);
+  if (rb.length) h += sec('головне · ' + rb.length) + lim('big', rb, 3, function (t) { return row(t, { big: 1 }); });
+  if (sm.length) h += sec('дрібні · ' + sm.length + ' на ~' + mins(sm.reduce(function (s, t) { return s + (t.mins || 0); }, 0))) + lim('sm', sm, 4, function (t) { return row(t); });
+  if (rest.length) h += sec('решта · ' + rest.length) + lim('rest', rest, 2, function (t) { return row(t); });
+  return h + tailLinks();
+}
+function nowCard(now) {
+  return '<div class="now" id="sw" data-sw="now" data-id="' + esc(now.id) + '"><div class="stamp" id="stY" style="background:var(--grn)">зроблено</div><div class="stamp" id="stN" style="background:#6B6B70">на завтра</div>' +
+    '<button class="nt" data-open="' + esc(now.id) + '"><div class="cap">ЗАРАЗ</div><div class="t">' + esc(now.name || now.title) + '</div><div class="m">' + meta(now, 1) + '</div></button>' +
+    '<div class="two"><button class="b" data-z="' + esc(now.id) + '">на завтра</button><button class="b pri" data-x="' + esc(now.id) + '">зроблено</button></div></div>';
+}
+
+function vMemberList(om) {
+  var wt = S.d.wait || [], h = '';
+  h += om.length ? sec('решта · ' + om.length) + lim('m-mine', om, 8, function (t) { return row(t, { plain: 1 }); }) : (S.d.mine.length ? '' : empty('пусто', 'Відкритих задач нема)'));
+  if (wt.length) h += sec('чекаю від Алекса · ' + wt.length) + lim('m-wait', wt, 4, function (t) { return row(t, { plain: 1 }); });
+  return h + tailLinks();
+}
+
+
+function vInbox() {
+  var xs = inbox(), c = xs[0];
+  var h = hd('з чатів · ' + (xs.length ? xs.length + ' ' + plural(xs.length, 'нова', 'нові', 'нових') : 'нових нема'), 'вхідні');
+  if (!c) return h + empty('усе розібрано', 'Нові задачі з чатів з\'являться тут самі');
+  var owner = S.owners[c.id] || c.owner;
+  var ppl = S.d.people.map(function (p) { return '<button class="pp' + (p === owner ? ' on' : '') + '" data-owner="' + esc(p) + '" aria-pressed="' + (p === owner) + '">' + av(p) + '<span class="nm">' + esc(p) + '</span></button>'; }).join('');
+  var why = owner === c.owner ? (c.why ? 'Пропоную: ' + esc(owner) + ', бо ' + esc(c.why) : '') : 'Ти змінив на: ' + esc(owner);
+  return h + '<div class="stack">' + (xs.length > 1 ? '<div class="ghost"></div>' : '') +
+    '<div class="sw" id="sw" data-sw="inbox"><div class="stamp" id="stY" style="background:var(--acc)">' + (owner === 'Алекс' ? 'беру' : esc(DAT[owner] || owner)) + '</div><div class="stamp" id="stN" style="background:#6B6B70">не беру</div>' +
+    '<div class="src"><div class="sq">' + esc(String(c.author || c.chat || '?').charAt(0)) + '</div><div><b>' + esc(c.author || c.chat) + '</b><span>' + esc([c.author ? c.chat : '', c.time].filter(Boolean).join(' · ')) + '</span></div></div>' +
+    (c.quote ? '<div class="quote">«' + esc(c.quote) + '»</div>' : '') +
+    '<div><div class="k">задача</div><div class="task">' + esc(c.task) + '</div></div>' +
+    '<div><div class="k">хто робить</div><div class="ppl">' + ppl + '</div>' + (why ? '<div class="why">' + why + '</div>' : '') + '</div>' +
+    '<div class="foot">коли <span class="pill">' + esc(c.when) + '</span><span style="margin-left:auto">' + esc(c.project) + '</span></div></div></div>' +
+    '<div class="two"><button class="b mut" data-act="skip">не беру</button><button class="b pri" data-act="take">' + (owner === 'Алекс' ? 'беру собі' : 'передати ' + esc(DAT[owner] || owner)) + '</button></div>' +
+    '<div class="src0">вправо беру · вліво не беру</div>';
+}
+
+function swipe(el, done) {
+  var x0 = 0, y0 = 0, dx = 0, on = false, lock = '', pid = null, last = [], sY = $('stY'), sN = $('stN');
+  var W = function () { return Math.min(100, el.offsetWidth * 0.28); };
+  function paint() { el.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 22) + 'deg)'; if (sY) sY.style.opacity = dx > 30 ? Math.min(1, dx / W()) : 0; if (sN) sN.style.opacity = dx < -30 ? Math.min(1, -dx / W()) : 0; }
+  function fly(yes) {
+    if (S.busy) return; S.busy = true; el.style.transition = 'transform .23s ease';
+    el.style.transform = 'translateX(' + (yes ? 640 : -640) + 'px) rotate(' + (yes ? 18 : -18) + 'deg)';
+    setTimeout(function () { S.busy = false; done(yes); }, 230);
+  }
+  function start(x, y, id) { on = true; lock = ''; x0 = x; y0 = y; dx = 0; pid = id; last = [[Date.now(), x]]; el.style.transition = 'none'; }
+  function move(x, y, e) {
+    if (!on) return; var ddx = x - x0, ddy = y - y0;
+    if (!lock) { if (Math.abs(ddx) > 6 && Math.abs(ddx) >= Math.abs(ddy)) { lock = 'x'; if (pid != null) try { el.setPointerCapture(pid); } catch (z) { } } else if (Math.abs(ddy) > 10) { on = false; return; } else return; }
+    if (e && e.cancelable) e.preventDefault();
+    dx = ddx; last.push([Date.now(), x]); if (last.length > 5) last.shift(); paint();
+  }
+  function end() {
+    if (!on) return; on = false; el.style.transition = 'transform .23s ease';
+    if (lock === 'x') S.dragAt = Date.now();
+    var a = last[0], b = last[last.length - 1], v = b && a && b[0] > a[0] ? (b[1] - a[1]) / (b[0] - a[0]) : 0;
+    if (dx > W() || (dx > 40 && v > 0.45)) fly(true); else if (dx < -W() || (dx < -40 && v < -0.45)) fly(false); else { dx = 0; paint(); }
+  }
+  if (window.PointerEvent) {
+    el.addEventListener('pointerdown', function (e) { if (e.pointerType === 'mouse' && e.button !== 0) return; start(e.clientX, e.clientY, e.pointerId); });
+    el.addEventListener('pointermove', function (e) { move(e.clientX, e.clientY, e); });
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', function () { if (lock === 'x' && Math.abs(dx) > 40) end(); else { on = false; dx = 0; el.style.transition = 'transform .2s ease'; paint(); } });
+  } else {
+    el.addEventListener('touchstart', function (e) { var t = e.touches[0]; start(t.clientX, t.clientY, null); }, { passive: true });
+    el.addEventListener('touchmove', function (e) { var t = e.touches[0]; move(t.clientX, t.clientY, e); }, { passive: false });
+    el.addEventListener('touchend', end); el.addEventListener('touchcancel', end);
+  }
+  el._fly = fly;
+}
+function decide(yes) {
+  var c = inbox()[0]; if (!c) return;
+  var owner = S.owners[c.id] || c.owner;
+  S.d.inbox = inbox().slice(1);
+  if (yes) S.d[owner === 'Алекс' ? 'mine' : 'team'].unshift({ id: 'new-' + c.id, title: c.task, name: c.task, project: c.project, who: owner, heat: c.when, fresh: true, what: c.task, why: c.chat + (c.quote ? ': «' + c.quote + '»' : ''), mins: 0, url: '' });
+  toast(yes ? (owner === 'Алекс' ? 'Взяв собі' : 'Передав: ' + owner) : 'Пропустив');
+  render();
+  run('kAppAct', [S.init, yes ? 'take' : 'skip', c.id, owner], function (r) { if (!r || r.ok !== true) toast('Не вийшло записати, оновлюю'); else if (r.url) { var t = find('new-' + c.id); if (t) t.url = r.url; } soon_(); });
+}
+
+
+function projs() { var p = S.d.projects; return p && p.ok ? p.items : []; }
+function isSt(p) { return p.stage === 'старт'; }
+function work() { return projs().filter(function (p) { return !isSt(p); }); }
+function pword(p) { return isSt(p) ? 'На старті' : word(p.s); }
+function pnum(p, fs) { return '<b style="font-size:' + fs + 'px">' + (p.s == null ? '—' : p.s) + '</b>'; }
+function projBy(key) { return projs().filter(function (p) { return p.key === key; })[0]; }
+function psub(p) { return esc([p.buyer, p.stage, p.month ? p.month + ' місяць' : ''].filter(Boolean).join(' · ')); }
+function pvd(p) { var t = tone(p.s); return '<div class="vd">' + ring(p.s || 0, 64, 7, 'var(--' + (t || 'ring') + ')', pnum(p, 22)) + '<div><div class="w ' + t + '">' + pword(p) + '</div><div class="m">' + (p.s == null ? esc(p.r[1]) : 'найслабше: ' + esc(p.weak)) + '</div></div></div>'; }
+function pcard(p, one) {
+  return '<article class="pc' + (one ? ' one' : '') + '" role="button" tabindex="0" data-p="' + esc(p.key) + '" aria-label="' + esc(p.name) + ', відкрити проєкт"><div class="pch"><div class="sq">' + mono(p.name) + '</div><div class="pn"><b>' + esc(p.name) + '</b><span>' + psub(p) + '</span></div><span class="chev">' + CHEV + '</span></div>' + pvd(p) +
+    '<div>' + [['результат', p.r], ['клієнт', p.c], ['ми', p.u]].map(function (a) { return '<div class="axr"><span class="l">' + a[0] + '</span>' + pt(a[1][0]) + '<span class="v">' + esc(a[1][1]) + '</span></div>'; }).join('') + '</div>' +
+    '<div class="tip">' + ARROW + '<span>' + (p.next ? esc(p.next.name) + (p.next.who ? ' · ' + esc(p.next.who) : '') : 'відкритих задач по проєкту нема') + '</span></div></article>';
+}
+function prow(p) {
+  var x = isSt(p) ? '<b>' + p.open + '</b><span>' + (p.hot ? p.hot + ' горить' : 'задач') + '</span>' : '<b>' + esc(p.mt[0]) + '</b><span>' + esc(p.mt[1]) + '</span>';
+  return '<button class="pr" data-p="' + esc(p.key) + '">' + ring(p.s || 0, 44, 5, 'var(--' + (tone(p.s) || 'ring') + ')', pnum(p, 13)) +
+    '<div style="min-width:0"><div class="n">' + esc(p.name) + '</div><div class="m">' + pword(p) + ' · ' + esc(p.buyer) + '</div></div><div class="x">' + x + '</div></button>';
+}
+function vProj() {
+  var P = S.d.projects;
+  if (!P || !P.ok) return hd('таблиця проєктів', 'проєкти') + empty('не відкрилась', 'Таблиця проєктів зараз недоступна. Задачі працюють як завжди');
+  var all = work(), st = projs().filter(isSt), c = function (g) { return all.filter(function (p) { return grp(p.s) === g; }).length; }, L = all.filter(function (p) { return S.pf === 'all' || grp(p.s) === S.pf; });
+  if (S.pi >= L.length) S.pi = 0;
+  var tail = (st.length && S.pf === 'all' ? sec('на старті · ' + st.length) + '<div class="list">' + st.map(prow).join('') + '</div>' : '') + '<div class="src0">Факт і стан клієнта вношу я. Тут нічого заповнювати не треба</div>';
+  var h = hd('з таблиці проєктів · тільки дивитись', 'проєкти') + stats([['all', all.length, 'у роботі'], ['bad', c('bad'), 'рятувати', 'red'], ['mid', c('mid'), 'стежити', 'amb'], ['good', c('good'), 'добре', 'grn']], S.pf, 'pf');
+  if (!L.length) return h + empty('пусто', 'Таких проєктів зараз нема');
+  return h + '<div class="deck" id="deck">' + L.map(function (p) { return pcard(p, L.length === 1); }).join('') + '</div>' +
+    (L.length > 1 ? '<div class="dots" id="dots">' + L.map(function (_, i) { return '<i class="' + (i === S.pi ? 'on' : '') + '"></i>'; }).join('') + '</div>' : '') +
+    sec('списком · від найслабшого') + '<div class="list">' + L.map(prow).join('') + '</div>' + tail;
+}
+function vProjPage(key) {
+  var p = projBy(key); if (!p) return null;
+  var ts = open_(S.d.mine.concat(S.d.team)).filter(function (t) { return t.project === p.key; }), nx = p.next && find(p.next.id) && !S.done[p.next.id] && !S.tom[p.next.id] ? p.next : null;
+  var f3 = p.f7 ? '<div class="f3"><div><span>' + (p.period ? esc(p.period) : '7 днів') + '</span><b>' + esc(p.f7) + '</b></div><div><span>KPI</span><b>' + esc(p.kpi || '—') + '</b></div><div><span>місяць</span><b>' + esc(p.fm || '—') + '</b></div></div>' : '';
+  var lv = { 'погано': 'red', 'нормально': '', 'дуже добре': 'grn' };
+  var scale = '<div class="scale" role="img" aria-label="стан клієнта: ' + esc(p.cs || 'ще не питав') + '">' + ['погано', 'нормально', 'дуже добре'].map(function (x) { return '<span class="' + (p.cs === x ? 'on ' + lv[x] : '') + '">' + x + '</span>'; }).join('') + '</div>';
+  var h = '<button class="back" data-back="1">‹ назад</button><div class="pg">' +
+    '<div class="card"><div class="pch"><div class="sq">' + mono(p.name) + '</div><div class="pn"><b>' + esc(p.name) + '</b><span>' + psub(p) + '</span></div></div>' + pvd(p) + '</div>';
+  if (nx || p.daily) h += '<div class="nx">' + (nx ? '<div><div class="l">далі' + (nx.who ? ' · ' + esc(nx.who) : '') + '</div><p>' + esc(nx.name) + '</p></div>' : '') +
+    '<div class="two">' + (nx ? '<button class="b' + (p.daily ? '' : ' w2') + '" data-open="' + esc(nx.id) + '">відкрити задачу</button>' : '') + (p.daily ? '<a class="b' + (nx ? '' : ' w2') + '" href="' + esc(p.daily) + '">дейлі-таблиця</a>' : '') + '</div></div>';
+  h += '<div class="card"><div class="axh"><b>результат</b>' + pt(p.r[0]) + '</div>' + f3 + '<div class="s13">' + esc(p.r[1]) + (p.best ? '. Планка: ' + esc(p.best) : '') + '</div></div>' +
+    '<div class="card"><div class="axh"><b>клієнт</b>' + pt(p.c[0]) + '</div>' + scale + '<div class="s13">' + (p.cs ? 'З таблиці проєктів. Оновлюю після розмови з тобою' : 'Ще не питав. Спитаю при наступній розмові про клієнтів') + '</div></div>' +
+    '<div class="card"><div class="axh"><b>ми</b>' + pt(p.u[0]) + '</div><div class="s13">' + esc(p.u[1]) + '. Мінус 15 за кожну прострочену задачу</div></div>';
+  if (p.notes && p.notes.length) h += '<div class="card"><div class="axh"><b>що відбувається</b>' + (p.noteDate ? '<span class="s13">на ' + esc(p.noteDate) + '</span>' : '') + '</div><div class="nl">' + (S.exp['n-' + p.key] ? p.notes : p.notes.slice(0, 3)).map(function (x) { return '<div>' + esc(x) + '</div>'; }).join('') + '</div>' +
+    (p.notes.length > 3 && !S.exp['n-' + p.key] ? '<button class="more" data-exp="n-' + esc(p.key) + '" style="margin-top:0">показати ще ' + (p.notes.length - 3) + '</button>' : '') + '</div>';
+  h += '</div>';
+  if (ts.length) h += sec('задачі проєкту · ' + ts.length) + lim('pt-' + p.key, ts, 4, function (x) { return row(x, { av: 1 }); });
+  return h + '<div class="src0">' + (p.s == null ? 'Загальної оцінки нема, поки в таблиці проєктів нема факту за 7 днів' : 'Загальна оцінка: результат важить половину, клієнт і ми по чверті. Вона не вища за найслабшу вісь + 25') + '</div>';
+}
+
+
+function teamPpl() { var ps = ['Руслан', 'Юля', 'Віка']; S.d.team.forEach(function (t) { if (t.who && ps.indexOf(t.who) < 0) ps.push(t.who); }); return ps; }
+function vTeam() {
+  var ps = teamPpl(); if (ps.indexOf(S.person) < 0) S.person = ps[0];
+  var P = S.person, st = S.stats;
+  if (!st && !S.statsAt) loadStats();
+  var h = hd(st ? 'тиждень ' + esc(st.range) : esc(S.d.day), 'команда') +
+    '<div class="ppl c3">' + ps.map(function (p) { return '<button class="pp' + (p === P ? ' on' : '') + '" data-set="person:' + esc(p) + '" aria-pressed="' + (p === P) + '">' + av(p) + '<span class="nm">' + esc(p) + '</span></button>'; }).join('') + '</div>' +
+    '<div class="seg" style="margin:8px 0 14px">' + [['tasks', 'задачі'], ['eff', 'ефективність']].map(function (x) { return '<button data-set="tm:' + x[0] + '" class="' + (S.tm === x[0] ? 'on' : '') + '" aria-pressed="' + (S.tm === x[0]) + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  if (S.tm === 'eff') return h + vEff();
+  var xs = open_(S.d.team.filter(function (t) { return t.who === P; })), hots = xs.filter(hot), wk = Date.now() - 7 * 86400000;
+  var c7 = (S.d.closed || []).filter(function (x) { return x.who === P && x.status === 'Виконано' && (!x.day || new Date(x.day).getTime() >= wk); });
+  var pr = (S.d.proj || {})[P] || [], wait = pr.length ? open_(S.d.mine).filter(function (t) { return pr.indexOf(t.project) >= 0; }) : [];
+  var ep = effP(P), sc = ep ? ep.score : null;
+  h += '<div class="st c4">' + [['all', xs.length, 'відкрито', ''], ['hot', hots.length, 'горить', 'red'], ['done', c7.length, 'закрито', '']].map(function (x) { return '<button data-set="tpf:' + x[0] + '" class="' + (S.tpf === x[0] ? 'on' : '') + '" aria-pressed="' + (S.tpf === x[0]) + '"><b class="' + x[3] + '">' + x[1] + '</b><span>' + x[2] + '</span></button>'; }).join('') +
+    '<button data-set="tm:eff" aria-label="оцінка, відкрити ефективність"><b class="' + (sc == null ? '' : etone(sc)) + '">' + (sc == null ? '…' : sc) + '</b><span>оцінка</span></button></div>';
+  if (S.tpf === 'done') return h + (c7.length ? sec('закрито за тиждень · ' + c7.length) + lim('c7-' + P, c7, 8, function (x) { return crow(x, [x.project, x.dm, x.at].filter(Boolean).join(' · ')); }) : empty('пусто', 'За тиждень закритих задач нема'));
+  if (S.tpf === 'hot') return h + (hots.length ? sec('горить · ' + hots.length) + '<div class="list">' + hots.map(function (t) { return row(t); }).join('') + '</div>' : empty('нічого не горить', 'Кайф)'));
+  var nd = xs.filter(function (t) { return t.dup; }).length, old = xs.filter(function (t) { return t.age >= 14 && !t.deadline; }).length;
+  var line = [nd ? nd + ' ' + plural(nd, 'схожа', 'схожі', 'схожих') + ', глянь чи не дублі' : '', old ? old + ' ' + plural(old, 'висить', 'висять', 'висять') + ' 2+ тижні без строку' : ''].filter(Boolean).join(' · ');
+  if (line) h += '<div class="s13" style="margin:10px 4px 0">' + line + '</div>';
+  if (wait.length) h += sec('чекає від тебе · ' + wait.length) + lim('w-' + P, wait, 3, function (t) { return row(t); });
+  h += xs.length ? sec('задачі ' + esc(GEN[P] || P) + ' · ' + xs.length) + lim('t-' + P, xs, 5, function (t) { return row(t); }) : empty('пусто', 'У ' + esc(GEN[P] || P) + ' відкритих задач нема');
+  return h;
+}
+function loadStats() {
+  S.statsAt = Date.now();
+  run('kAppStats', [S.init, S.as || ''], function (r) { if (r && r.ok) { S.stats = r; if ((S.tab === 'team' || S.tab === 'week') && !top_()) render(1); } }, function () { S.statsAt = 0; if (S.tab === 'team' && S.tm === 'eff') toast('Не вийшло порахувати, спробуй ще раз'); });
+}
+function effP(n) { return S.stats ? S.stats.people.filter(function (p) { return p.name === n; })[0] : null; }
+function effOrder() { return S.stats ? ['team', 'Алекс', 'Руслан', 'Юля', 'Віка', 'Claude'].filter(function (k) { return k === 'team' || k === 'Claude' || effP(k); }) : []; }
+function etone(v) { return v == null ? '' : v >= 75 ? 'grn' : v >= 50 ? 'amb' : 'red'; }
+function eword(v) { return v >= 75 ? 'Хороший темп' : v >= 50 ? 'Є що підтягнути' : 'Просідає'; }
+function pct(a, b) { return b ? Math.round(a / b * 100) + '%' : '—'; }
+function hrs(x) { return String(Math.round(x * 10) / 10).replace('.', ',') + ' год'; }
+function edelta(v, prev) { if (prev == null || v == null || v === prev) return ''; var d = v - prev; return pt((d > 0 ? '↑ ' : '↓ ') + Math.abs(d), d > 0 ? 'grn' : 'red'); }
+var LB = { over: 'перевантаження', free: 'є запас', ok: 'норма' }, EL = { onTime: 'вчасно', done: 'виконання', fresh: 'без зависань', load: 'завантаження' };
+function evd(v, w, m) { var t = etone(v); return '<div class="vd">' + ring(v, 64, 7, 'var(--' + t + ')', '<b style="font-size:22px">' + v + '</b>') + '<div><div class="w ' + t + '">' + w + '</div><div class="m">' + m + '</div></div></div>'; }
+function ecTeam(st) {
+  var ps = ['Руслан', 'Юля', 'Віка'].map(effP).filter(Boolean), me = effP('Алекс'), sc = st.team.score;
+  var sum = function (k) { return ps.reduce(function (s, p) { return s + (p[k] || 0); }, 0); }, done = sum('done7'), hots = sum('hot');
+  var over = ps.filter(function (p) { return p.load === 'over'; }).map(function (p) { return p.name; }), free = ps.filter(function (p) { return p.load === 'free'; }).map(function (p) { return GEN[p.name] || p.name; });
+  var lines = ['За тиждень закрили ' + done + ', вчасно ' + pct(sum('onTime'), sum('withDl'))];
+  if (hots) lines.push('Горить ' + hots + ' ' + plural(hots, 'задача', 'задачі', 'задач'));
+  if (over.length) lines.push(listy(over) + (over.length > 1 ? ' перевантажені' : ' перевантажений') + (free.length ? ', запас є у ' + listy(free) : '')); else if (free.length) lines.push('Запас є у ' + listy(free));
+  return '<section class="pc"><div class="pch"><div class="sq">К</div><div class="pn"><b>команда</b><span>підсумок тижня без тебе</span></div>' + edelta(sc, st.team.prev) + '</div>' +
+    evd(sc, sc >= 75 ? 'Хороший темп' : sc >= 50 ? 'Є що підтягнути' : 'Треба розвантажити', 'середнє по Руслану, Юлі й Віці') +
+    '<div>' + lines.map(function (l) { return '<div class="axr"><span class="v">' + esc(l) + '</span></div>'; }).join('') + '</div>' +
+    '<div class="e4">' + ps.concat(me ? [me] : []).map(function (p) { return '<button data-ecgo="' + esc(p.name) + '" aria-label="' + esc(p.name) + ', відкрити картку">' + ring(p.score, 48, 5, 'var(--' + etone(p.score) + ')', '<b style="font-size:13px">' + p.score + '</b>') + (p.name === 'Алекс' ? 'ти' : esc(p.name)) + '</button>'; }).join('') + '</div></section>';
+}
+function ecPerson(p) {
+  var me = p.name === 'Алекс', pa = p.parts || {}, keys = ['onTime', 'done', 'fresh', 'load'];
+  var facts = { onTime: p.withDl ? p.onTime + ' з ' + p.withDl + ' закритих зі строком' : 'закритих зі строком нема', done: 'закрито ' + p.done7 + ', горить ' + p.hot,
+    fresh: p.stale ? p.stale + ' без строку 2+ тижні' : 'нічого не висить', load: '~' + hrs(p.hours) + ' з ' + p.cap + ', ' + LB[p.load] };
+  var weak = keys.slice().sort(function (a, b) { return (pa[a] || 0) - (pa[b] || 0); })[0];
+  return '<section class="pc"><div class="pch">' + av(p.name, 1) + '<div class="pn"><b>' + (me ? 'ти' : esc(p.name)) + '</b><span>' + (me ? 'твоя оцінка як власника' : 'оцінка за тиждень') + '</span></div>' + edelta(p.score, p.prev) + '</div>' +
+    evd(p.score, eword(p.score), 'найслабше: ' + EL[weak]) +
+    '<div>' + keys.map(function (k) { return '<div class="axr"><span class="l">' + EL[k] + '</span>' + pt(pa[k], etone(pa[k])) + '<span class="v">' + esc(facts[k]) + '</span></div>'; }).join('') + '</div>' +
+    (me ? '<div class="f2"><div><b>' + p.bigDone + ' з ' + (p.bigDone + p.bigOpen) + '</b><span>головних закрито</span></div><div><b>' + p.gave + ' / ' + p.self + '</b><span>віддав / взяв собі</span></div></div>' : '') + '</section>';
+}
+function ecClaude(c) {
+  c = c || { done7: 0, hours: 0, last: [] };
+  return '<section class="pc"><div class="pch">' + av('Claude', 1) + '<div class="pn"><b>Claude</b><span>робота через треди за 7 днів</span></div></div>' +
+    '<div class="f2"><div><b>' + c.done7 + '</b><span>закрито задач</span></div><div><b>~' + hrs(c.hours) + '</b><span>за оцінкою часу</span></div></div>' +
+    (c.last && c.last.length ? '<div>' + c.last.map(function (x) { return '<div class="axr"><span class="v">' + esc(x) + '</span></div>'; }).join('') + '</div>' : '<div class="s13">За тиждень записаної роботи нема</div>') + '</section>';
+}
+function vEff() {
+  var st = S.stats; if (!st) { if (!S.statsAt) loadStats(); return '<div class="load" style="padding:40px 0">рахую…</div>'; }
+  var order = effOrder(); if (S.ei >= order.length) S.ei = 0;
+  var h = '<div class="deck" id="edeck" style="margin-top:0">' + order.map(function (k) { return k === 'team' ? ecTeam(st) : k === 'Claude' ? ecClaude(st.claude) : ecPerson(effP(k)); }).join('') + '</div>' +
+    '<div class="dots" id="edots">' + order.map(function (_, i) { return '<i class="' + (i === S.ei ? 'on' : '') + '"></i>'; }).join('') + '</div>';
+  if (st.note && st.note.length) h += sec('що зробити') + '<div class="card"><div class="nl">' + st.note.map(function (n) { return '<div>' + esc(n) + '</div>'; }).join('') + '</div></div>';
+  return h + '<div class="src0">Оцінка 0–100: вчасно 35, виконання 30, без зависань 15, завантаження 20</div>';
+}
+
+
+function briefProj(b) { return projs().filter(function (p) { return new RegExp('(^|[^a-zа-яіїєґ])' + p.key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-zа-яіїєґ]|$)', 'i').test(b.chat || ''); })[0]; }
+function vBrief() {
+  var P = S.d.projects, h = hd(esc(S.d.day), 'бриф');
+  if (P && P.ok) {
+    var all = work(), c = function (g) { return all.filter(function (p) { return grp(p.s) === g; }).length; }, goal = P.goal || 15;
+    h += sec('куди ростемо') + '<div class="card"><div class="gh"><b>' + P.inWork + ' з ' + goal + '</b><span class="s13">' + plural(P.inWork, 'проєкт', 'проєкти', 'проєктів') + ' у роботі</span></div>' +
+      '<div class="gbar" role="img" aria-label="' + P.inWork + ' з ' + goal + '"><i style="width:' + Math.min(100, Math.round(P.inWork / goal * 100)) + '%"></i></div>' +
+      '<div class="s13">До цілі ще ' + Math.max(0, goal - P.inWork) + (P.start && P.start.length ? '. На старті: ' + esc(P.start.join(', ')) : '') + '</div></div>' +
+      '<div class="st" style="margin-top:8px">' + [['bad', c('bad'), 'рятувати', 'red'], ['mid', c('mid'), 'стежити', 'amb'], ['good', c('good'), 'добре', 'grn']].map(function (x) { return '<button data-pgo="' + x[0] + '"><b class="' + x[3] + '">' + x[1] + '</b><span>' + x[2] + '</span></button>'; }).join('') + '</div>';
+  }
+  var f = S.d.focus;
+  h += sec('фокус тижня' + (f && f.date ? ' · з ' + esc(f.date) : '')) + (f ? '<div class="nx"><p style="margin:0">' + esc(f.text) + '</p></div>' : '<div class="card"><p class="s13">Ще не записаний. Розкажи в треді, як справи по клієнтах, і я поставлю сюди головне на тиждень</p></div>');
+  var wk = open_(S.d.mine).filter(function (t) { return t.big && (t.urg >= 0 || hot(t)); });
+  if (!wk.length) wk = open_(S.d.mine).filter(function (t) { return t.urg >= 0; }).slice(0, 3);
+  h += sec('головне на тиждень' + (wk.length ? ' · ' + wk.length : '')) + (wk.length ? lim('bw', wk, 4, function (t) { return row(t, { plain: 1 }); }) : '<div class="card"><p class="s13">Головних на тиждень нема. Відкрий задачу і познач «★ головна»</p></div>');
+  var br = S.d.brief || [], n = function (k) { return br.filter(function (b) { return b.flag === k; }).length; };
+  h += sec('з чатів' + (S.d.briefDate ? ' · ' + esc(S.d.briefDate) : ''));
+  if (!br.length) return h + '<div class="card"><p class="s13">Новини з чатів з\'являються зранку: що сталося і що важливо сьогодні</p></div>';
+  h += stats([['all', br.length, 'усе'], ['att', n('att'), 'увага', 'red'], ['today', n('today'), 'сьогодні']], S.bf, 'bf') + '<div class="list" style="margin-top:8px">';
+  br.forEach(function (b, i) {
+    if (S.bf !== 'all' && b.flag !== S.bf) return; var o = S.bo[i], att = b.flag === 'att', pj = o ? briefProj(b) : null;
+    h += '<div class="bc' + (o ? ' open' : '') + '"><button class="bt" data-b="' + i + '" aria-expanded="' + !!o + '"><div class="bh"><i class="' + (att ? 'red' : '') + '"></i><b>' + esc(b.chat || 'чат') + '</b><span' + (att ? ' class="red"' : '') + '>' + (att ? 'потребує уваги' : 'на сьогодні') + '</span></div><p>' + esc(b.text) + '</p></button>' +
+      (pj ? '<div class="two"><button class="b w2" data-p="' + esc(pj.key) + '">до проєкту ' + esc(pj.name) + '</button></div>' : '') + '</div>';
+  });
+  return h + '</div>';
+}
+
+
+function vTask(id) {
+  var t = find(id); if (!t) return null;
+  var mineT = t.who === 'Алекс' && !isM(), nw = /^new-/.test(t.id), dn = S.done[t.id] || S.tom[t.id], acts = '';
+  if (t.ro) acts = '<div class="s13" style="margin:14px 4px 0">Це задача Алекса по твоєму проєкту. Тут тільки подивитись</div>';
+  else if (S.skip === t.id) acts = '<div class="s13" style="margin:14px 4px 0">Чому не робимо? Задача піде в Notion як «Скасовано» і не рахується як зрив</div><div class="g4">' +
+    ['не актуально', 'вирішили інакше', 'дубль'].map(function (r) { return '<button class="b w2" data-why="' + esc(r) + '">' + (r === 'дубль' && t.dup ? 'дубль: ' + esc(String(t.dup).slice(0, 26)) : esc(r)) + '</button>'; }).join('') + '<button class="b mut w2" data-skip="">назад</button></div>';
+  else if (!dn && !nw) acts = '<div class="g4"><button class="b pri" data-x="' + esc(t.id) + '">закрити</button><button class="b" data-z="' + esc(t.id) + '">на завтра</button>' +
+    (mineT ? '<button class="b" data-star="' + esc(t.id) + '">' + (t.big ? '☆ не головна' : '★ головна') + '</button><button class="b mut" data-skip="' + esc(t.id) + '">не робимо</button>' : '<button class="b mut w2" data-skip="' + esc(t.id) + '">не робимо</button>') + '</div>';
+  var team = t.who !== 'Алекс';
+  return '<button class="back" data-back="1">‹ назад</button><div class="card"><div class="lbl">' + esc([t.big && mineT ? '★ головна' : '', t.project, team || t.ro ? t.who : ''].filter(Boolean).join(' · ')) + '</div><h2>' + esc(t.title) + '</h2><div class="fields">' +
+    (t.what ? '<div><span>що зробити</span><p>' + esc(t.what) + '</p></div>' : '') +
+    (t.why ? '<div><span>чому зараз</span><p>' + esc(t.why) + '</p></div>' : '') +
+    '<div><span>коли</span><p>' + esc(t.heat || 'без строку') + (t.mins ? ' · ~' + mins(t.mins) : '') + '</p></div>' +
+    (t.dup ? '<div><span>схожа задача</span><p>' + esc(t.dup) + '</p></div>' : '') +
+    (team && t.age ? '<div><span>висить</span><p>' + t.age + ' дн. від створення</p></div>' : '') + '</div></div>' + acts +
+    (t.url ? '<a class="more" href="' + esc(t.url) + '">відкрити в Notion</a>' : '');
+}
+
+
+function recent(k) { var v = store(k); return Object.prototype.toString.call(v) === '[object Array]' ? v : []; }
+function remember(k, v, n) { var xs = recent(k).filter(function (x) { return JSON.stringify(x) !== JSON.stringify(v); }); xs.unshift(v); store(k, xs.slice(0, n)); }
+function seen(kind, id) { if (!isM()) remember('ha_seen', [kind, id], 6); }
+function vSearch() { return '<button class="back" data-back="1">‹ назад</button><div class="hd"><div><h1>пошук</h1></div></div><div class="sbox"><input id="q" placeholder="клієнт або слово" autocomplete="off" enterkeyhint="search" aria-label="пошук"></div><div id="res"></div>'; }
+function srow(t) { return row(t, { av: 1, plain: 1 }); }
+function paintSearch() {
+  var q = S.q.trim().toLowerCase(), out = $('res'); if (!out) return;
+  if (!q) {
+    var rq = recent('ha_rq'), rs = recent('ha_seen').map(function (x) { return x[0] === 'p' ? { p: projBy(x[1]) } : { t: find(x[1]) }; }).filter(function (x) { return x.p || (x.t && !S.done[x.t.id] && !S.tom[x.t.id]); }).slice(0, 4);
+    var worst = work().filter(function (p) { return p.s != null && p.s < 55; }).slice(0, 2), hots = open_(S.d.mine).filter(hot).slice(0, 3), h = '';
+    if (rq.length) h += sec('нещодавно шукав') + '<div class="chips">' + rq.map(function (x) { return '<button data-q="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>';
+    if (rs.length) h += sec('нещодавно відкривав') + '<div class="list">' + rs.map(function (x) { return x.p ? prow(x.p) : srow(x.t); }).join('') + '</div>';
+    if (worst.length || hots.length) h += sec('можна відкрити одразу') + '<div class="list">' + worst.map(prow).join('') + hots.map(srow).join('') + '</div>';
+    h += sec('люди') + '<div class="chips">' + teamPpl().map(function (p) { return '<button data-goperson="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div>';
+    out.innerHTML = h + '<div class="src0">Шукає по задачах, проєктах, вхідних, брифу і чату команди</div>'; return;
+  }
+  var hit = function (s) { return String(s || '').toLowerCase().indexOf(q) >= 0; };
+  var ps = projs().filter(function (p) { return hit(p.name) || hit(p.buyer); });
+  var ts = open_(S.d.mine.concat(S.d.team)).filter(function (t) { return hit(t.title) || hit(t.project) || hit(t.who) || hit(t.what); });
+  var ib = inbox().filter(function (c) { return hit(c.task) || hit(c.chat) || hit(c.project) || hit(c.quote); });
+  var bs = (S.d.brief || []).filter(function (b) { return hit(b.text) || hit(b.chat); });
+  var h2 = '';
+  if (ps.length) h2 += sec('проєкти · ' + ps.length) + '<div class="list">' + ps.map(prow).join('') + '</div>';
+  if (ts.length) h2 += sec('задачі · ' + ts.length) + '<div class="list">' + ts.slice(0, 12).map(srow).join('') + '</div>';
+  if (bs.length) h2 += sec('бриф · ' + bs.length) + '<div class="list">' + bs.map(function (b) { return '<div class="msg"><div class="w"><b>' + esc(b.chat || 'чат') + '</b></div><p>' + esc(b.text) + '</p></div>'; }).join('') + '</div>';
+  if (ib.length) h2 += sec('у вхідних · ' + ib.length) + '<div class="list">' + ib.map(function (c) { return '<div class="msg"><div class="w"><b>' + esc(c.chat) + '</b></div><p>' + esc(c.task) + '</p></div>'; }).join('') + '</div>';
+  out.innerHTML = h2 + '<div id="chat"></div>';
+  chatSearch(q, !h2);
+}
+function mk(t, q) { var e = esc(t), ws = q.split(/\s+/).filter(function (w) { return w.length > 1; }); ws.forEach(function (w) { var i = e.toLowerCase().indexOf(esc(w)); if (i >= 0) e = e.slice(0, i) + '<mark>' + e.slice(i, i + esc(w).length) + '</mark>' + e.slice(i + esc(w).length); }); return e; }
+function chatPaint(q, none) {
+  var el = $('chat'); if (!el || S.q.trim().toLowerCase() !== q) return;
+  var r = S.cs[q];
+  if (!r) { el.innerHTML = '<p class="s13" style="margin:14px 2px 0">Шукаю в чаті команди…</p>'; return; }
+  if (!r.length) { el.innerHTML = none ? empty('нічого', 'Ні в задачах, ні в чаті команди. Спробуй інше слово') : ''; return; }
+  el.innerHTML = sec('у чаті команди · ' + r.length + (r.length >= 40 ? '+' : '')) + '<div class="list">' + r.map(function (m) { return '<div class="msg"><div class="w"><b>' + esc(m.who) + '</b> · ' + esc(m.date) + ' ' + esc(m.time) + '</div><p>' + mk(m.text, q) + '</p></div>'; }).join('') + '</div>';
+}
+function chatSearch(q, none) {
+  if (q.length < 2) return;
+  chatPaint(q, none); if (S.cs[q]) return;
+  clearTimeout(S.ct);
+  S.ct = setTimeout(function () { run('kAppSearch', [S.init, q], function (r) { S.cs[q] = r && r.hits || []; chatPaint(q, none); }, function () { S.cs[q] = []; chatPaint(q, none); }); }, 350);
+}
+
+
+function oldList(f) {
+  var cl = (S.d.closed || []).filter(function (x) { return f === 'all' || (f === 'done' ? x.status === 'Виконано' : f === 'skip' ? x.status !== 'Виконано' : false); });
+  var idle = f === 'all' || f === 'idle' ? open_(S.d.mine.concat(S.d.team)).filter(function (t) { return t.idle >= 14; }).sort(function (a, b) { return b.idle - a.idle; }) : [];
+  return idle.map(function (t) { return { open: t }; }).concat(cl.map(function (x) { return { x: x }; }));
+}
+function oldWhen(x) { return x.status === 'Виконано' ? 'закрито ' + x.dm + ' ' + x.at : (x.status === 'Архів' ? 'архів ' : 'не робимо ') + x.dm + (x.reason ? ' · ' + x.reason : ''); }
+function vOld() {
+  var f = S.of, xs = oldList(f), n = function (k) { return oldList(k).length; };
+  var h = '<button class="back" data-back="1">‹ назад</button><div class="hd"><div><div class="lbl">за 2 тижні</div><h1>старі задачі</h1></div></div>' +
+    stats([['all', n('all'), 'усі'], ['done', n('done'), 'закриті'], ['skip', n('skip'), 'зняті'], ['idle', n('idle'), 'висять']], f, 'of');
+  if (!xs.length) return h + empty('пусто', 'Тут нічого нема');
+  return h + '<div style="margin-top:14px">' + lim('old-' + f, xs, 12, function (o) {
+    if (o.open) { var t = o.open; return '<button class="row" data-open="' + esc(t.id) + '"><span class="ck"><i></i></span><div class="rt"><div class="n">' + esc(t.name || t.title) + '</div><div class="m">' + esc([t.who, t.project, 'без руху ' + t.idle + ' дн.'].filter(Boolean).join(' · ')) + '</div></div></button>'; }
+    var x = o.x, okd = x.status === 'Виконано';
+    return '<button class="row' + (okd ? ' done' : '') + '" data-cl="' + esc(x.id) + '"><span class="ck"><i>' + (okd ? TICK : '') + '</i></span><div class="rt"><div class="n">' + esc(x.title) + '</div><div class="m">' + esc([x.who || (x.claude ? 'Claude' : ''), x.project, oldWhen(x)].filter(Boolean).join(' · ')) + '</div></div></button>';
+  }) + '</div><div class="src0">Закрите і «не робимо» за 2 тижні, відкриті без руху 14+ днів. Натисни, щоб відкрити або повернути в роботу</div>';
+}
+function vClosed(id) {
+  var x = (S.d.closed || []).filter(function (c) { return c.id === id; })[0]; if (!x) return null;
+  return '<button class="back" data-back="1">‹ назад</button><div class="card"><div class="lbl">' + esc([x.project, x.who].filter(Boolean).join(' · ')) + '</div><h2>' + esc(x.full || x.title) + '</h2><div class="fields">' +
+    '<div><span>статус</span><p>' + esc(oldWhen(x)) + (x.claude ? ' · через Claude' : '') + '</p></div>' +
+    (x.what ? '<div><span>що зробити</span><p>' + esc(x.what) + '</p></div>' : '') +
+    (x.why ? '<div><span>чому</span><p>' + esc(x.why) + '</p></div>' : '') + '</div></div>' +
+    '<div class="g4"><button class="b w2" data-reopen="' + esc(x.id) + '">повернути в роботу</button></div>' +
+    (x.url ? '<a class="more" href="' + esc(x.url) + '">відкрити в Notion</a>' : '');
+}
+function reopen(id) {
+  var x = (S.d.closed || []).filter(function (c) { return c.id === id; })[0]; if (!x) return;
+  S.d.closed = S.d.closed.filter(function (c) { return c.id !== id; }); S.d.doneToday = (S.d.doneToday || []).filter(function (c) { return c.id !== id; });
+  delete S.done[id]; delete S.tom[id]; var who = x.who || 'Алекс';
+  S.d[who === 'Алекс' || isM() ? 'mine' : 'team'].push({ id: x.id, title: x.full || x.title, name: x.title, project: x.project, who: who, heat: 'без строку', what: x.what || '', why: '', mins: 0, url: x.url || '', idle: 0 });
+  S.stack.pop(); S.statsAt = 0; toast('Повернув у роботу'); render(); run('kAppAct', [S.init, 'r', id], okOr_());
+}
+
+
+var MLV = { 'погано': 'red', 'нормально': 'amb', 'дуже добре': 'grn' };
+function mpos(r) { return r == null ? -1 : Math.max(3, Math.min(97, r < 70 ? r / 70 * 33.3 : r < 88 ? 33.3 + (r - 70) / 18 * 33.3 : 66.7 + (r - 88) / 10 * 33.3)); }
+function mword(p) { return p.stage === 'старт' ? 'на старті' : p.res == null ? 'нема даних' : p.level || (p.res >= 88 ? 'дуже добре' : p.res >= 70 ? 'нормально' : 'погано'); }
+function mtone(p) { return p.res == null ? '' : MLV[p.level] || (p.res >= 88 ? 'grn' : p.res >= 70 ? 'amb' : 'red'); }
+function mtasks(p) { return p.open ? (p.hot ? '<span class="red">' + p.open + ' ' + plural(p.open, 'задача', 'задачі', 'задач') + ', ' + p.hot + ' горить</span>' : p.open + ' ' + plural(p.open, 'задача', 'задачі', 'задач')) : 'твоїх задач нема'; }
+function mcard(p) {
+  var pos = mpos(p.res);
+  return '<button class="mp" data-p="' + esc(p.key) + '"><div class="top"><b>' + esc(p.name) + '</b><span class="mchip ' + mtone(p) + '">' + esc(mword(p)) + '</span></div>' +
+    (pos >= 0 ? '<div class="kp"><b>' + esc(p.f7) + '</b><span>' + esc(p.lbl) + (p.kpi ? '<br>KPI ' + esc(p.kpi) : '') + '</span></div><div class="mbar"><i style="left:' + pos.toFixed(1) + '%"></i></div><div class="mbl"><span>погано</span><span>нормально</span><span>дуже добре</span></div>' :
+      '<div class="ft">' + (p.stage === 'старт' ? 'Старт, цифр ще нема' : 'Факту за 7 днів у таблиці ще нема' + (p.kpi ? ', KPI ' + esc(p.kpi) : '')) + '</div>') +
+    '<div class="ft">' + mtasks(p) + (p.month ? ' · ' + esc(p.month) + ' місяць' : '') + '</div></button>';
+}
+function vMProj() {
+  var P = S.d.projects; if (!P || !P.ok) return hd('мої проєкти', 'проєкти') + empty('не відкрилась', 'Таблиця проєктів зараз недоступна. Задачі працюють як завжди');
+  var rk = function (p) { return p.stage === 'старт' ? 300 : p.res == null ? 200 : p.res; };
+  var L = P.items.slice().sort(function (a, b) { return rk(a) - rk(b) || (a.name < b.name ? -1 : 1); });
+  return hd('мої проєкти · тільки дивитись', 'проєкти') +
+    '<div class="st"><button type="button"><b>' + P.inWork + '</b><span>у роботі</span></button><button type="button"><b class="grn">' + P.inKpi + '</b><span>в KPI</span></button><button type="button"><b class="red">' + P.outKpi + '</b><span>поза KPI</span></button></div>' +
+    sec('від найслабшого') + '<div class="list">' + L.map(mcard).join('') + '</div><div class="src0">Факт за 7 днів з таблиці проєктів, оновлюється щодня</div>';
+}
+function vMProjPage(key) {
+  var P = S.d.projects, p = P && P.ok ? P.items.filter(function (x) { return x.key === key; })[0] : null; if (!p) return null;
+  var ts = open_(S.d.mine).filter(function (t) { return t.project === p.key; }), wt = (S.d.wait || []).filter(function (t) { return t.project === p.key; });
+  var h = '<button class="back" data-back="1">‹ назад</button><div class="pg"><div class="card"><div class="mp" style="padding:0"><div class="top"><b style="font-size:22px">' + esc(p.name) + '</b><span class="mchip ' + mtone(p) + '">' + esc(mword(p)) + '</span></div>' +
+    '<div class="ft">' + esc([p.month ? p.month + ' місяць' : '', p.period ? 'дані за ' + p.period : ''].filter(Boolean).join(' · ')) + '</div></div>' +
+    (p.f7 ? '<div class="f3"><div><span>7 днів</span><b>' + esc(p.f7) + '</b></div><div><span>KPI</span><b>' + esc(p.kpi || '—') + '</b></div><div><span>місяць</span><b>' + esc(p.fm || '—') + '</b></div></div>' +
+      (mpos(p.res) >= 0 ? '<div><div class="mbar"><i style="left:' + mpos(p.res).toFixed(1) + '%"></i></div><div class="mbl" style="margin-top:6px"><span>погано</span><span>нормально</span><span>дуже добре</span></div></div>' : '') +
+      (p.best ? '<div class="s13">' + esc(p.lbl) + '. Дуже добре: ' + esc(p.best) + '</div>' : '') :
+      '<div class="s13">' + (p.stage === 'старт' ? 'Проєкт на старті: цифри з\'являться, коли піде реклама' : 'Факту за 7 днів у таблиці проєктів ще нема') + '</div>') + '</div></div>';
+  h += ts.length ? sec('мої задачі тут · ' + ts.length) + lim('mpt-' + p.key, ts, 6, function (t) { return row(t, { plain: 1 }); }) : sec('мої задачі тут') + '<div class="card"><p class="s13">Відкритих задач по проєкту нема</p></div>';
+  if (wt.length) h += sec('чекаю від Алекса · ' + wt.length) + lim('mpw-' + p.key, wt, 4, function (t) { return row(t, { plain: 1 }); });
+  return h;
+}
+function vWeek() {
+  var st = S.stats && S.stats.member ? S.stats : null, h = hd(st ? esc(st.range) : 'останні 7 днів', 'мій тиждень');
+  if (!st) { if (!S.statsAt) loadStats(); return h + '<div class="load">Рахую…</div>'; }
+  var m = st.me, d = m.done7 - m.donePrev, mx = Math.max.apply(null, m.weeks.concat([1])), wl = ['3 тиж. тому', '2 тиж. тому', 'минулий', 'цей'];
+  h += '<div class="card"><div class="lbl">закрив задач за 7 днів</div><div class="wk1"><b>' + m.done7 + '</b>' + (d ? '<span class="' + (d > 0 ? 'grn' : 'red') + '">' + (d > 0 ? '↑ ' : '↓ ') + Math.abs(d) + ' до минулого тижня</span>' : '') + '</div>' +
+    '<div class="wbars">' + m.weeks.map(function (n, i) { return '<div><em>' + n + '</em><s class="' + (i === 3 ? 'on' : '') + '" style="height:' + Math.max(6, Math.round(n / mx * 72)) + 'px"></s><span>' + wl[i] + '</span></div>'; }).join('') + '</div></div>';
+  h += '<div class="st" style="margin-top:8px"><button type="button"><b>' + pct(m.onTime, m.withDl) + '</b><span>вчасно</span></button><button type="button"><b>' + (m.avgDays == null ? '—' : String(m.avgDays).replace('.', ',') + ' д') + '</b><span>на задачу</span></button><button type="button"><b class="' + (m.hot ? 'red' : '') + '">' + m.hot + '</b><span>горить</span></button></div>';
+  var lg = (st.long || []).map(function (x) { return find(x.id); }).filter(function (t) { return t && !S.done[t.id] && !S.tom[t.id]; });
+  if (lg.length) h += sec('найдовше висить') + '<div class="list">' + lg.map(function (t) { var x = st.long.filter(function (y) { return y.id === t.id; })[0]; return '<div class="row"><button class="ck" data-done="' + esc(t.id) + '" aria-label="закрити задачу"><i>' + TICK + '</i></button><button class="rt" data-open="' + esc(t.id) + '"><div class="n">' + esc(t.name || t.title) + '</div><div class="m">' + esc(t.project || '') + ' · <span class="' + (x.hot ? 'red' : '') + '">висить ' + x.days + ' ' + plural(x.days, 'день', 'дні', 'днів') + '</span></div></button></div>'; }).join('') + '</div>';
+  var wk = Date.now() - 7 * 86400000, c7 = (S.d.closed || []).filter(function (x) { return x.status === 'Виконано' && (!x.day || new Date(x.day).getTime() >= wk); });
+  if (c7.length) h += sec('закрив за тиждень · ' + c7.length) + lim('wc7', c7, 5, function (x) { return crow(x, [x.project, x.dm].filter(Boolean).join(' · ')); });
+  return h + '<div class="src0">Тут тільки твої задачі, без порівнянь з іншими</div>';
+}
+
+
+function nav() {
+  var m = isM(), mp = m && S.d.projects && S.d.projects.ok, tabs = m ? ['today'].concat(mp ? ['proj'] : [], ['week']) : ['today', 'inbox', 'proj', 'team', 'brief'];
+  $('nav').hidden = false; document.querySelector('nav .in').style.gridTemplateColumns = 'repeat(' + tabs.length + ', minmax(0, 1fr))';
+  [].forEach.call(document.querySelectorAll('nav [data-tab]'), function (b) { b.hidden = tabs.indexOf(b.getAttribute('data-tab')) < 0; });
+  if (m) { ['bInbox', 'bProj', 'bTeam'].forEach(function (x) { $(x).hidden = true; }); }
+  [].forEach.call(document.querySelectorAll('nav [data-tab]'), function (b) { var on = b.getAttribute('data-tab') === S.tab; b.classList.toggle('on', on); if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+  if (m) return;
+  var bad = work().filter(function (p) { return grp(p.s) === 'bad'; }).length, th = open_(S.d.team).filter(hot).length;
+  [['bInbox', inbox().length], ['bProj', bad], ['bTeam', th]].forEach(function (x) { var el = $(x[0]); el.hidden = !x[1]; el.textContent = x[1]; });
+}
+function deck(id, key, dotsId, onMove) {
+  var box = $(id); if (!box || !box.children.length) return;
+  var step = function () { return box.children[0].offsetWidth + 10; };
+  box.scrollLeft = S[key] * step();
+  box.addEventListener('scroll', function () { var i = Math.round(box.scrollLeft / step()); if (i === S[key]) return; S[key] = i; var d = $(dotsId); if (d) [].forEach.call(d.children, function (x, j) { x.classList.toggle('on', j === i); }); if (onMove) onMove(i); }, { passive: true });
+}
+function render(keep) {
+  if (isM() && ['today', 'proj', 'week'].indexOf(S.tab) < 0) S.tab = 'today';
+  nav();
+  var pg = top_(), y = window.scrollY, h;
+  if (pg) h = pg.k === 'task' ? vTask(pg.id) : pg.k === 'proj' ? (isM() ? vMProjPage(pg.id) : vProjPage(pg.id)) : pg.k === 'closed' ? vClosed(pg.id) : pg.k === 'old' ? vOld() : vSearch();
+  else h = ((isM() ? { today: vToday, proj: vMProj, week: vWeek } : { today: vToday, inbox: vInbox, proj: vProj, team: vTeam, brief: vBrief })[S.tab] || vToday)();
+  if (h == null) { S.stack.pop(); return render(keep); }
+  $('app').innerHTML = h; window.scrollTo(0, keep ? y : 0);
+  var sw = $('sw'); if (sw) swipe(sw, function (yes) { if (sw.getAttribute('data-sw') === 'inbox') decide(yes); else if (yes) doneTask(sw.getAttribute('data-id')); else tomorrow(sw.getAttribute('data-id')); });
+  deck('deck', 'pi', 'dots');
+  deck('edeck', 'ei', 'edots', function (i) { var k = effOrder()[i]; if (teamPpl().indexOf(k) < 0 || S.person === k) return; S.person = k; S.tpf = 'all';
+    [].forEach.call(document.querySelectorAll('.ppl [data-set]'), function (el) { var on = el.getAttribute('data-set') === 'person:' + k; el.classList.toggle('on', on); el.setAttribute('aria-pressed', on); }); });
+  var q = $('q'); if (q) {
+    q.value = S.q; q.addEventListener('input', function () { S.q = q.value; paintSearch(); });
+    q.addEventListener('keydown', function (e) { if (e.key === 'Enter') { saveQ(); q.blur(); } });
+    paintSearch();
+  }
+}
+function saveQ() { var v = S.q.trim(); if (v.length >= 2 && !isM()) remember('ha_rq', v, 6); }
+
+function hideTask(id, kind, why) {
+  (kind === 'z' ? S.tom : S.done)[id] = 1; if (S.pend[id]) clearTimeout(S.pend[id].t);
+  S.pend[id] = { k: kind, r: why || '', t: setTimeout(function () { delete S.pend[id]; send_(id, kind, why); }, 4000) };
+}
+function send_(id, kind, why) {
+  S.statsAt = 0;
+  var back = function () { delete S.done[id]; delete S.tom[id]; toast('Не вийшло, спробуй ще раз'); render(1); };
+  run('kAppAct', [S.init, kind, id, why || ''], function (r) { if (!r || r.ok !== true) return back(); soon_(); }, back);
+}
+function soon_() { clearTimeout(S.soon); S.soon = setTimeout(function () { S.at = 0; refresh(); }, 700); }
+function okOr_(why) { return function (r) { if (!r || r.ok !== true) { toast(why || 'Не вийшло, спробуй ще раз'); } soon_(); }; }
+function flushPend(leaving) {
+  Object.keys(S.pend).forEach(function (id) {
+    var p = S.pend[id]; clearTimeout(p.t); delete S.pend[id];
+    var sent = false;
+    if (leaving && navigator.sendBeacon) { try { sent = navigator.sendBeacon(API, new Blob([JSON.stringify({ fn: 'kAppAct', args: [S.init, p.k, id, p.r || ''] })], { type: 'text/plain;charset=utf-8' })); } catch (e) { sent = false; } }
+    if (!sent) send_(id, p.k, p.r);
+  });
+}
+function popTask(id) { var pg = top_(); if (pg && pg.k === 'task' && pg.id === id) S.stack.pop(); }
+function doneTask(id) { if (/^new-/.test(id) || S.done[id]) return; hideTask(id, 'x'); popTask(id); toast('Топ. Мінус одна)', id); render(1); }
+function tomorrow(id) { if (/^new-/.test(id) || S.tom[id]) return; hideTask(id, 'z'); popTask(id); toast('Ок, на завтра', id); render(1); }
+
+function sig(d) {
+  return [d.mine, d.team, d.inbox, d.wait].map(function (xs) { return (xs || []).map(function (t) { return t.id + ':' + (t.heat || '') + ':' + (t.prio || '') + ':' + (t.owner || t.who || ''); }).join(','); }).join('|') + '|' + (d.brief || []).length + '|' + (d.doneToday || []).map(function (x) { return x.id; }).join(',') + '|' + (d.closed || []).map(function (x) { return x.id; }).join(',') +
+    '|' + (d.projects && d.projects.items || []).map(function (p) { return p.key + ':' + (p.s != null ? p.s : p.res) + ':' + (p.r ? p.r[1] : p.f7) + ':' + (p.cs || p.open); }).join(',') + '|' + (d.focus ? d.focus.text : '');
+}
+function prep(d, people) { d.inbox = d.inbox || []; d.brief = d.brief || []; d.wait = d.wait || []; d.team = d.team || []; d.people = d.people || people || ['Алекс', 'Руслан', 'Юля', 'Віка']; return d; }
+
+function reload() {
+  flushPend(); $('app').innerHTML = '<div class="load">Завантажую…</div>'; window.scrollTo(0, 0);
+  run('kAppData', [S.init, S.as], function (d) {
+    if (!d || !d.ok) { if (!S.as) { $('app').innerHTML = '<div class="load">Не завантажилось, закрий і відкрий ще раз</div>'; return; } S.as = ''; toast('Не вийшло'); return reload(); }
+    S.d = prep(d); S.at = Date.now(); S.tab = 'today'; S.tf = 'all'; S.stack = []; S.done = {}; S.tom = {}; S.exp = {}; S.stats = null; S.statsAt = 0;
+    render();
+  }, function () { S.as = ''; $('app').innerHTML = '<div class="load">Не завантажилось, закрий і відкрий ще раз</div>'; });
+}
+function refresh() {
+  if (S.loading || !S.init || !S.d || S.busy) return; S.loading = 1;
+  run('kAppData', [S.init, S.as], function (d) {
+    S.loading = 0; S.at = Date.now(); if (!d || !d.ok) { if (d && d.why === 'old') toast('Закрий застосунок і відкрий ще раз'); return; }
+    prep(d, S.d.people);
+    var same = sig(d) === sig(S.d), kd = {}, kt = {}, was = Object.keys(S.done).length + Object.keys(S.tom).length;
+    Object.keys(S.done).forEach(function (id) { if (S.pend[id]) kd[id] = 1; }); Object.keys(S.tom).forEach(function (id) { if (S.pend[id]) kt[id] = 1; }); S.done = kd; S.tom = kt;
+    var fresh = S.d.mine.concat(S.d.team).filter(function (t) { return /^new-/.test(t.id); });
+    fresh.forEach(function (t) { if (!d.mine.concat(d.team).some(function (x) { return x.title === t.title; })) d[t.who === 'Алекс' ? 'mine' : 'team'].unshift(t); });
+    S.d = d; var pg = top_(), changed = was !== Object.keys(S.done).length + Object.keys(S.tom).length; if ((same && !changed) || (pg && pg.k === 'search')) return;
+    render(1);
+  }, function () { S.loading = 0; });
+}
+document.addEventListener('visibilitychange', function () { if (document.hidden) flushPend(true); else if (Date.now() - S.at > 15000) refresh(); });
+window.addEventListener('focus', function () { if (Date.now() - S.at > 15000) refresh(); });
+window.addEventListener('pagehide', function () { flushPend(true); });
+setInterval(function () { if (!document.hidden && Date.now() - S.at > 30000) refresh(); }, 10000);
+document.addEventListener('click', function (e) {
+  if (Date.now() - S.dragAt < 400) { e.preventDefault(); return; }
+  var g = function (sel) { return e.target.closest(sel); }, b, sw = $('sw'), pg = top_();
+  if (!S.d) return;
+  if ((b = g('nav [data-tab]'))) { S.tab = b.getAttribute('data-tab'); S.stack = []; S.skip = null; return render(); }
+  if ((b = g('[data-undo]'))) { var u = b.getAttribute('data-undo'); if (S.pend[u]) clearTimeout(S.pend[u].t); delete S.pend[u]; delete S.done[u]; delete S.tom[u]; $('toast').classList.remove('on'); return render(1); }
+  if ((b = g('[data-search]'))) { S.q = ''; S.stack.push({ k: 'search' }); render(); return; } // пошук з іконки завжди чистий: зверху нещодавні і пропозиції
+  if ((b = g('[data-back]'))) { if (pg && pg.k === 'search') saveQ(); S.stack.pop(); S.skip = null; return render(); }
+  if ((b = g('[data-q]'))) { S.q = b.getAttribute('data-q'); var qi = $('q'); if (qi) qi.value = S.q; return paintSearch(); }
+  if ((b = g('[data-goperson]'))) { S.person = b.getAttribute('data-goperson'); S.tab = 'team'; S.tm = 'tasks'; S.tpf = 'all'; S.stack = []; return render(); }
+  if ((b = g('[data-pgo]'))) { S.pf = b.getAttribute('data-pgo'); S.pi = 0; S.tab = 'proj'; S.stack = []; return render(); }
+  if ((b = g('[data-set]'))) {
+    var sv = b.getAttribute('data-set'), si = sv.indexOf(':'), k = sv.slice(0, si), v = sv.slice(si + 1);
+    S[k] = S[k] === v && (k === 'tf' || k === 'tpf' || k === 'pf' || k === 'bf' || k === 'of') ? 'all' : v;
+    if (k === 'pf') S.pi = 0; if (k === 'person') S.tpf = 'all';
+    if (k === 'tm' && v === 'eff' && Date.now() - S.statsAt > 60000) loadStats();
+    if ((k === 'person' || k === 'tm') && S.tm === 'eff') { var oi = effOrder().indexOf(S.person); if (oi >= 0) S.ei = oi; }
+    return render(1);
+  }
+  if ((b = g('[data-exp]'))) { S.exp[b.getAttribute('data-exp')] = 1; return render(1); }
+  if ((b = g('[data-ecgo]'))) { var ei = effOrder().indexOf(b.getAttribute('data-ecgo')), box = $('edeck'); if (ei < 0 || !box) return; box.scrollTo({ left: ei * (box.children[0].offsetWidth + 10), behavior: 'smooth' }); return; }
+  if ((b = g('[data-b]'))) { var bi = b.getAttribute('data-b'); S.bo[bi] = !S.bo[bi]; return render(1); }
+  if ((b = g('[data-owner]'))) { var c = inbox()[0]; if (c) { S.owners[c.id] = b.getAttribute('data-owner'); render(1); } return; }
+  if ((b = g('[data-act]'))) { var yes = b.getAttribute('data-act') === 'take'; if (sw && sw._fly) return sw._fly(yes); return decide(yes); }
+  if ((b = g('[data-as]'))) { S.as = b.getAttribute('data-as'); return reload(); }
+  if ((b = g('[data-asx]'))) { S.as = ''; return reload(); }
+  if ((b = g('[data-old]'))) { S.of = b.getAttribute('data-old'); S.stack.push({ k: 'old' }); return render(); }
+  if ((b = g('[data-reopen]'))) return reopen(b.getAttribute('data-reopen'));
+  if ((b = g('[data-done]'))) return doneTask(b.getAttribute('data-done'));
+  if ((b = g('[data-x]'))) { if (sw && sw._fly && sw.getAttribute('data-sw') === 'now' && sw.contains(b)) return sw._fly(true); return doneTask(b.getAttribute('data-x')); }
+  if ((b = g('[data-z]'))) { if (sw && sw._fly && sw.getAttribute('data-sw') === 'now' && sw.contains(b)) return sw._fly(false); return tomorrow(b.getAttribute('data-z')); }
+  if ((b = g('[data-skip]'))) { S.skip = b.getAttribute('data-skip') || null; return render(1); }
+  if ((b = g('[data-why]'))) { var sk = S.skip, w = b.getAttribute('data-why'); S.skip = null; if (!sk) return; hideTask(sk, 'n', w); popTask(sk); toast('Не робимо · ' + w, sk); return render(1); }
+  if ((b = g('[data-star]'))) {
+    var t = find(b.getAttribute('data-star')); if (!t) return; var was = t.prio; t.big = !t.big; t.prio = t.big ? 'Дуже терміновий' : 'Середній'; if (t.big) t.small = false;
+    toast(t.big ? '★ Головна' : 'Зняв ★'); render(1); return run('kAppAct', [S.init, 'p', t.id, was === 'Дуже терміновий' ? 'Дуже терміновий' : ''], okOr_());
+  }
+  if ((b = g('[data-cl]'))) { if (pg && pg.k === 'search') saveQ(); S.stack.push({ k: 'closed', id: b.getAttribute('data-cl') }); return render(); }
+  if ((b = g('[data-p]'))) { if (pg && pg.k === 'search') saveQ(); var pk = b.getAttribute('data-p'); seen('p', pk); S.stack.push({ k: 'proj', id: pk }); return render(); }
+  if ((b = g('[data-open]'))) { if (pg && pg.k === 'search') saveQ(); var id = b.getAttribute('data-open'); seen('t', id); S.skip = null; S.stack.push({ k: 'task', id: id }); return render(); }
+});
+document.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('[role="button"]')) { e.preventDefault(); e.target.click(); } });
+
+function lum(hex) { var h = hex.replace('#', ''); return (0.299 * parseInt(h.substr(0, 2), 16) + 0.587 * parseInt(h.substr(2, 2), 16) + 0.114 * parseInt(h.substr(4, 2), 16)) / 255; }
+
+function noAccess(why, sent) {
+  var ask = why === 'nouser';
+  $('app').innerHTML = '<div class="noacc"><div class="ic">🔑</div><h2>' + (sent ? 'Запит у Алекса' : 'Доступу поки нема') + '</h2>' +
+    '<p>' + (sent ? 'Як тільки він підтвердить, відкрий застосунок ще раз.' : ask ? 'Попроси доступ, і Алекс підтвердить його у себе в Telegram.' : 'Відкрий застосунок з бота в Telegram ще раз.') + '</p>' +
+    (ask && !sent ? '<button class="b pri" id="askAcc">Попросити доступ</button>' : '') +
+    (sent ? '<button class="b" id="reAcc">Перевірити доступ</button>' : '') + '</div>';
+  var a = $('askAcc'); if (a) a.onclick = function () {
+    a.disabled = true; a.textContent = 'Надсилаю…';
+    run('kAppAsk', [S.init], function (r) {
+      if (r && r.has) return reload_(a);
+      if (r && r.sent) return noAccess(why, true);
+      a.disabled = false; a.textContent = 'Не вийшло, спробуй ще раз';
+    }, function () { a.disabled = false; a.textContent = 'Не вийшло, спробуй ще раз'; });
+  };
+  var b = $('reAcc'); if (b) b.onclick = function () { reload_(b); };
+}
+function reload_(b) {
+  b.textContent = 'Перевіряю…'; S.as = '';
+  run('kAppData', [S.init, ''], function (d) { if (d && d.ok) { S.d = prep(d); S.at = Date.now(); S.tab = 'today'; render(); } else b.textContent = 'Ще не підтвердив'; }, function () { b.textContent = 'Не вийшло, спробуй ще раз'; });
+}
+function start(hash) {
+  var h = String(hash || '').replace(/^#/, ''), q = new URLSearchParams(h);
+  var m = /(?:^|&)tgWebAppData=(.*?)(?=&tgWebApp[A-Za-z]+=|$)/.exec(h), raw = m ? m[1] : '';
+  S.init = /%3D|%26/i.test(raw) ? decodeURIComponent(raw) : raw;
+  try { var th = JSON.parse(q.get('tgWebAppThemeParams') || '{}'); if (th.bg_color && lum(th.bg_color) < .5) document.documentElement.classList.add('dark'); } catch (e) { }
+  if (!S.init) { $('app').innerHTML = '<div class="load">Відкрий це з бота в Telegram)</div>'; return; }
+  run('kAppData', [S.init, S.as], function (d) {
+    if (!d || !d.ok) return noAccess(d && d.why || '');
+    S.d = prep(d); S.at = Date.now();
+    S.tab = d.inbox.length && d.role !== 'member' ? 'inbox' : 'today';
+    store('ha_focus', null);
+    render();
+  }, function () { $('app').innerHTML = '<div class="load">Не завантажилось, закрий і відкрий ще раз</div>'; });
+}
+if (window.google && google.script && google.script.url) google.script.url.getLocation(function (loc) { start(loc.hash); });
+else start(location.hash);
+</script>
+</body>
+</html>
